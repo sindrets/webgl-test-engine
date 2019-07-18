@@ -5,7 +5,9 @@
   "main": "out/Main.js",
   "scripts": {
     "build": "webpack --mode production",
-    "test": "tsc -p ./tsconfig.test.json && jest"
+    "test": "tsc -p ./tsconfig.test.json && jest",
+    "start": "http-server -a localhost -p 3000",
+    "gen-decl": "dts-generator --project ./ --out ./typings/wte.d.ts"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,7 @@
     "@types/jest": "^24.0.15",
     "@types/request-promise-native": "^1.0.16",
     "dotenv": "^8.0.0",
+    "dts-generator": "^3.0.0",
     "http-server": "^0.11.1",
     "jest": "^24.8.0",
     "ts-loader": "^6.0.4",

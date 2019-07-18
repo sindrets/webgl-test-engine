@@ -4,12 +4,25 @@ export class Engine {
 	private limitFps: boolean = true;
 	private fps: number = 0;
 	private tps: number = 0;
+	private running: boolean = false;
+	private focused: boolean = true;
 
-	public async start() {
+	public constructor() {
+		document.addEventListener("visibilitychange", e => {
+			this.focused = document.visibilityState === "visible";
+		});
+	}
+
+	public start(): void {
+		this.running = true;
 		this.loop();
 	}
 
-	private loop(): void {
+	public stop(): void {
+		this.running = false;
+	}
+
+	private async loop(): Promise<void> {
 		let last: number, timer: number;
 		last = timer = performance.now();
 		let frames: number, ticks: number;
@@ -50,12 +63,16 @@ export class Engine {
 				frames = ticks = 0;
 				timer += 1000;
 			}
-			requestAnimationFrame(mainLoop);
+			if (this.running) {
+				requestAnimationFrame(mainLoop);
+			}
 		};
 		requestAnimationFrame(mainLoop); // start the loop
 	}
 
 	private update(delta: number): void {}
 
-	private render(): void {}
+	private render(): void {
+		if (!this.focused) return;
+	}
 }

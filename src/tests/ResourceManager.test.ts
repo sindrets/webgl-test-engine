@@ -1,10 +1,10 @@
 import { ResourceManager } from "../Utils/ResourceManager";
 
-const href = process.env["TEST_URL"] || "http://localhost:3000";
+const href = process.env["TEST_URL"];
 
 test("Text file is loaded correctly and resolves with a string.", async () => {
 	return new Promise((resolve, reject) => {
-		ResourceManager.loadTextFile(href + "/LICENSE")
+		ResourceManager.loadTextFile(href + "/.gitignore")
 			.then(data => {
 				expect(typeof data).toBe("string");
 				resolve();

@@ -52,10 +52,10 @@ module.exports = {
   // forceCoverageMatch: [],
 
   // A path to a module which exports an async function that is triggered once before all test suites
-  // globalSetup: null,
+  globalSetup: "<rootDir>/out/test-build/tests/global-setup.js",
 
   // A path to a module which exports an async function that is triggered once after all test suites
-  // globalTeardown: null,
+  globalTeardown: "<rootDir>/out/test-build/tests/global-teardown.js",
 
   // A set of global variables that need to be available in all test environments
   // globals: {},
@@ -121,7 +121,7 @@ module.exports = {
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
   setupFiles: [
-    "<rootDir>/out/test-build/tests/setupTests.js"
+    "<rootDir>/out/test-build/tests/setup.js"
   ],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
@@ -163,7 +163,7 @@ module.exports = {
   // testRunner: "jasmine2",
 
   // This option sets the URL for the jsdom environment. It is reflected in properties such as location.href
-  testURL: "http://localhost:3000/",
+  // testURL: "http://localhost:3000/",
 
   // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
   // timers: "real",

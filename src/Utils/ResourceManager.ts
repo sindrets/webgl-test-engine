@@ -18,7 +18,7 @@ export class ResourceManager {
 			axios
 				.get(url)
 				.then(resp => {
-					if (200 <= resp.status && resp.status < 300) {
+					if (~~(resp.status / 100) == 2) {
 						if (typeof resp.data !== "string") {
 							reject("Response data was not of type string!");
 						} else {

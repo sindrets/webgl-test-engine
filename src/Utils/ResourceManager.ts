@@ -8,9 +8,10 @@ export class ResourceManager {
 	 */
 	public static async loadTextFile(url: string, forceReload = false): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
+			let resolvedUrl = new URL(url, location.origin).href;
 			if (!forceReload) {
-				if (Object.keys(sessionStorage).indexOf(url) > -1) {
-					resolve(sessionStorage.getItem(url) as string);
+				if (Object.keys(sessionStorage).indexOf(resolvedUrl) > -1) {
+					resolve(sessionStorage.getItem(resolvedUrl) as string);
 					return;
 				}
 			}
@@ -22,7 +23,7 @@ export class ResourceManager {
 							reject("Response data was not of type string!");
 						} else {
 							// cache the data with the file url as key
-							sessionStorage.setItem(new URL(url, location.origin).href, resp.data);
+							sessionStorage.setItem(resolvedUrl, resp.data);
 							resolve(resp.data);
 						}
 					} else reject(resp);

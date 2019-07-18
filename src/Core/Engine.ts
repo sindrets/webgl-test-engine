@@ -1,6 +1,4 @@
-
 export class Engine {
-
 	private readonly FRAME_RATE = 60;
 	private readonly TICK_RATE = 60;
 	private limitFps: boolean = true;
@@ -53,15 +51,11 @@ export class Engine {
 				timer += 1000;
 			}
 			requestAnimationFrame(mainLoop);
-		}
+		};
 		requestAnimationFrame(mainLoop); // start the loop
 	}
 
-	private update(delta: number): void {
-	}
+	private update(delta: number): void {}
 
-	private render(): void {
-
-	}
-
+	private render(): void {}
 }

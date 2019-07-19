@@ -6,10 +6,12 @@ export class Engine {
 	private tps: number = 0;
 	private running: boolean = false;
 	private focused: boolean = true;
-
+	private wasUnfocused: boolean = false;
+	
 	public constructor() {
 		document.addEventListener("visibilitychange", e => {
 			this.focused = document.visibilityState === "visible";
+			if (!this.focused) this.wasUnfocused = true;
 		});
 	}
 
@@ -33,6 +35,11 @@ export class Engine {
 		frames = ticks = 0;
 
 		let mainLoop = (timestamp: number) => {
+			if (this.wasUnfocused) {
+				timer += timestamp - last;
+				last = timestamp;
+				this.wasUnfocused = false;
+			}
 			if (this.limitFps) {
 				deltaR += (timestamp - last) / drawRate;
 			}
@@ -46,7 +53,7 @@ export class Engine {
 			}
 
 			if (this.limitFps) {
-				while (deltaR >= 1.0) {
+				if (deltaR >= 1.0) {
 					this.render();
 					frames++;
 					deltaR %= 1;
@@ -56,12 +63,12 @@ export class Engine {
 				frames++;
 			}
 
-			let t = (timestamp - timer) / 1000.0;
-			if (t >= 1.0) {
+			if ((timestamp - timer) / 1000.0 >= 1.0) {
 				this.fps = frames;
-				this.tps = ticks - ticks * (t - 1.0);
+				this.tps = ticks;
 				frames = ticks = 0;
 				timer += 1000;
+				console.log("FPS:", this.fps, "TPS:", this.tps, "delta:", deltaU + 1);
 			}
 			if (this.running) {
 				requestAnimationFrame(mainLoop);
@@ -72,7 +79,5 @@ export class Engine {
 
 	private update(delta: number): void {}
 
-	private render(): void {
-		if (!this.focused) return;
-	}
+	private render(): void {}
 }

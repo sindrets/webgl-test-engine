@@ -4,48 +4,6 @@ export class ResourceManager {
 	private static cache = new Map<string, any>();
 
 	/**
-	 * Perform a GET request and optionally cache the sucessfull response.
-	 * @param url
-	 * @param cache Whether or not the response should be cached. Only sucessfull requests are
-	 * cached.
-	 * @param forceReload Perform a new GET request regardless of whether or not an entry exists in
-	 * cache.
-	 * @param cacheKeyPrefix A prefix for the cache key.
-	 * @param options
-	 */
-	public static async fetch(
-		url: string,
-		cache: boolean,
-		forceReload: boolean,
-		cacheKeyPrefix = "fetch::",
-		options: AxiosRequestConfig = {},
-	): Promise<AxiosResponse> {
-		return new Promise((resolve, reject) => {
-			let resolvedUrl = new URL(url, location.origin).href;
-			let cacheKey = cacheKeyPrefix + resolvedUrl;
-			if (cache && !forceReload) {
-				if (ResourceManager.cache.has(cacheKey)) {
-					resolve(ResourceManager.cache.get(cacheKey));
-					return;
-				}
-			}
-			axios
-				.get(url, options)
-				.then(resp => {
-					if (~~(resp.status / 100) == 2) {
-						if (cache) {
-							ResourceManager.cache.set(cacheKey, resp);
-						}
-						resolve(resp);
-					} else reject(resp);
-				})
-				.catch(reason => {
-					reject(reason);
-				});
-		});
-	}
-
-	/**
 	 * Fetch the contents of a text file. Results can be cached for faster access on subsequent
 	 * calls.
 	 * @param url The file url
@@ -97,6 +55,48 @@ export class ResourceManager {
 					} else {
 						resolve(resp.data);
 					}
+				})
+				.catch(reason => {
+					reject(reason);
+				});
+		});
+	}
+
+	/**
+	 * Perform a GET request and optionally cache the sucessfull response.
+	 * @param url
+	 * @param cache Whether or not the response should be cached. Only sucessfull requests are
+	 * cached.
+	 * @param forceReload Perform a new GET request regardless of whether or not an entry exists in
+	 * cache.
+	 * @param cacheKeyPrefix A prefix for the cache key.
+	 * @param options
+	 */
+	public static async fetch(
+		url: string,
+		cache: boolean,
+		forceReload: boolean,
+		cacheKeyPrefix = "fetch::",
+		options: AxiosRequestConfig = {},
+	): Promise<AxiosResponse> {
+		return new Promise((resolve, reject) => {
+			let resolvedUrl = new URL(url, location.origin).href;
+			let cacheKey = cacheKeyPrefix + resolvedUrl;
+			if (cache && !forceReload) {
+				if (ResourceManager.cache.has(cacheKey)) {
+					resolve(ResourceManager.cache.get(cacheKey));
+					return;
+				}
+			}
+			axios
+				.get(url, options)
+				.then(resp => {
+					if (~~(resp.status / 100) == 2) {
+						if (cache) {
+							ResourceManager.cache.set(cacheKey, resp);
+						}
+						resolve(resp);
+					} else reject(resp);
 				})
 				.catch(reason => {
 					reject(reason);

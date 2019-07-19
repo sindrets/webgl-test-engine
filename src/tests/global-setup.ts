@@ -8,7 +8,7 @@ module.exports = async () => {
     // Load environment variables.
     require("dotenv").config();
 
-    const PORT = process.env["PORT"] || 9001;
+    const PORT = process.env["PORT"] || 3030;
     const HOST = process.env["HOST"] || "localhost";
     const url = `http://${HOST}:${PORT}`;
     process.env["TEST_URL"] = url;

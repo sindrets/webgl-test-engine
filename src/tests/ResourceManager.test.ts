@@ -15,6 +15,19 @@ test("Text file is loaded correctly and resolves with a string.", async () => {
 	});
 });
 
+test("Json file is loaded correctly and resolves with an object.", async () => {
+	return new Promise((resolve, reject) => {
+		ResourceManager.loadJsonFile(href + "/package.json")
+			.then(data => {
+				expect(typeof data).toBe("object");
+				resolve();
+			})
+			.catch(reason => {
+				reject(reason);
+			});
+	});
+});
+
 test("Non-existing file will fail and reject Promise.", async () => {
 	return new Promise((resolve, reject) => {
 		ResourceManager.loadTextFile(href + "/my-dad")

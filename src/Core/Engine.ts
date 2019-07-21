@@ -1,3 +1,5 @@
+import { Renderer } from "./Renderer";
+
 export class Engine {
 	private readonly FRAME_RATE = 60;
 	private readonly TICK_RATE = 60;
@@ -7,8 +9,12 @@ export class Engine {
 	private running: boolean = false;
 	private focused: boolean = true;
 	private wasUnfocused: boolean = false;
-	
+
+	private _renderer: Renderer;
+
 	public constructor() {
+		this._renderer = new Renderer();
+
 		document.addEventListener("visibilitychange", e => {
 			this.focused = document.visibilityState === "visible";
 			if (!this.focused) this.wasUnfocused = true;
@@ -80,4 +86,8 @@ export class Engine {
 	private update(delta: number): void {}
 
 	private render(): void {}
+
+	public get renderer() {
+		return this._renderer;
+	}
 }

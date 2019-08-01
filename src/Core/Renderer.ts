@@ -14,7 +14,7 @@ export class Renderer {
 				if (c instanceof HTMLCanvasElement) {
 					this.canvas = c;
 				} else {
-					throw new Error("Could not find a canvas element matchd by selector:" + x);
+					throw new Error("Could not find a canvas element matched by selector:" + x);
 				}
 				break;
 			case "object":
@@ -25,9 +25,13 @@ export class Renderer {
 			default:
 				this.canvas = document.createElement("canvas");
 				this.canvas.style.background = "black";
-				document.addEventListener("DOMContentLoaded", e => {
+				if (/comp|inter|loaded/.test(document.readyState)) {
 					document.body.appendChild(this.canvas as HTMLCanvasElement);
-				});
+				} else {
+					document.addEventListener("DOMContentLoaded", e => {
+						document.body.appendChild(this.canvas as HTMLCanvasElement);
+					});
+				}
 		}
 
 		this.canvas.classList.add("wte-canvas");

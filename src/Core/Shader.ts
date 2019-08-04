@@ -1,3 +1,5 @@
+import { ResourceManager } from "../Utils/ResourceManager";
+
 export class Shader {
 	private _gl: WebGL2RenderingContext;
 	private _type: GLenum;
@@ -41,6 +43,18 @@ export class Shader {
 		}
 
 		return this._shader;
+	}
+
+	public async createFromFile(path: string, compile = true): Promise<WebGLShader | null> {
+		return new Promise((resolve, reject) => {
+			ResourceManager.loadTextFile(path)
+				.then(data => {
+					resolve(this.create(data, compile));
+				})
+				.catch(reason => {
+					reject(reason);
+				});
+		});
 	}
 
 	public delete(): void {

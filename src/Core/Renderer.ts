@@ -1,7 +1,7 @@
 import { CssUtils } from "../Utils/CssUtils";
 
 export class Renderer {
-	private canvas?: HTMLCanvasElement;
+	private _canvas?: HTMLCanvasElement;
 	private _gl: WebGL2RenderingContext | null = null;
 
 	private autoResize: boolean = false;
@@ -14,31 +14,31 @@ export class Renderer {
 			case "string":
 				let c = document.querySelector(x);
 				if (c instanceof HTMLCanvasElement) {
-					this.canvas = c;
+					this._canvas = c;
 				} else {
 					throw new Error("Could not find a canvas element matched by selector:" + x);
 				}
 				break;
 			case "object":
-				this.canvas = x;
+				this._canvas = x;
 				break;
 			case "boolean":
 				autoResize = x;
 			default:
-				this.canvas = document.createElement("canvas");
-				this.canvas.style.background = "black";
+				this._canvas = document.createElement("canvas");
+				this._canvas.style.background = "black";
 				if (/comp|inter|loaded/.test(document.readyState)) {
-					document.body.appendChild(this.canvas);
+					document.body.appendChild(this._canvas);
 				} else {
 					document.addEventListener("DOMContentLoaded", e => {
-						document.body.appendChild(this.canvas as HTMLCanvasElement);
+						document.body.appendChild(this._canvas as HTMLCanvasElement);
 					});
 				}
 		}
 
-		this.canvas.classList.add("wte-canvas");
+		this._canvas.classList.add("wte-canvas");
 		this.setAutoResize(autoResize);
-		this._gl = this.canvas.getContext("webgl2");
+		this._gl = this._canvas.getContext("webgl2");
 		if (this.gl) {
 			console.debug(this.gl.getParameter(this.gl.VERSION));
 			console.debug(this.gl.getParameter(this.gl.SHADING_LANGUAGE_VERSION));
@@ -49,6 +49,10 @@ export class Renderer {
 			this.gl.frontFace(this.gl.CCW);
 			this.gl.cullFace(this.gl.BACK);
 		}
+
+		window.addEventListener("resize", () => {
+			this.resize();
+		});
 	}
 
 	public setAutoResize(flag: boolean): void {
@@ -65,6 +69,23 @@ export class Renderer {
 		}
 	}
 
+	private resize(): void {
+		if (this.canvas) {
+			const displayWidth = this.canvas.clientWidth;
+			const displayHeight = this.canvas.clientHeight;
+			if (this.canvas.width != displayWidth || this.canvas.height != displayHeight) {
+				this.canvas.width = displayWidth;
+				this.canvas.height = displayHeight;
+				if (this.gl) {
+					this.gl.viewport(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
+				}
+			}
+		}
+	}
+
+	public get canvas(): HTMLCanvasElement | undefined {
+		return this._canvas;
+	}
 	public get gl() {
 		return this._gl;
 	}

@@ -62,3 +62,6 @@ typings/
 
 # build output
 out
+
+# misc
+.vscode

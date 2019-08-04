@@ -60,12 +60,12 @@ export class Engine {
 
 			if (this.limitFps) {
 				if (deltaR >= 1.0) {
-					this.render();
+					this.render(this.renderer.gl);
 					frames++;
 					deltaR %= 1;
 				}
 			} else {
-				this.render();
+				this.render(this.renderer.gl);
 				frames++;
 			}
 
@@ -85,7 +85,12 @@ export class Engine {
 
 	private update(delta: number): void {}
 
-	private render(): void {}
+	private render(gl: WebGLRenderingContext | null): void {
+		if (gl) {
+			gl.clearColor(0.1, 0.1, 0.1, 1.0);
+			gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+		}
+	}
 
 	public get renderer() {
 		return this._renderer;

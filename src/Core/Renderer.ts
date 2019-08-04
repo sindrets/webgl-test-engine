@@ -2,6 +2,8 @@ import { CssUtils } from "../Utils/CssUtils";
 
 export class Renderer {
 	private canvas?: HTMLCanvasElement;
+	private _gl: WebGL2RenderingContext | null = null;
+
 	private autoResize: boolean = false;
 
 	public init(autoResize?: boolean): void;
@@ -26,7 +28,7 @@ export class Renderer {
 				this.canvas = document.createElement("canvas");
 				this.canvas.style.background = "black";
 				if (/comp|inter|loaded/.test(document.readyState)) {
-					document.body.appendChild(this.canvas as HTMLCanvasElement);
+					document.body.appendChild(this.canvas);
 				} else {
 					document.addEventListener("DOMContentLoaded", e => {
 						document.body.appendChild(this.canvas as HTMLCanvasElement);
@@ -36,6 +38,17 @@ export class Renderer {
 
 		this.canvas.classList.add("wte-canvas");
 		this.setAutoResize(autoResize);
+		this._gl = this.canvas.getContext("webgl2");
+		if (this.gl) {
+			console.debug(this.gl.getParameter(this.gl.VERSION));
+			console.debug(this.gl.getParameter(this.gl.SHADING_LANGUAGE_VERSION));
+			this.gl.clearColor(0.1, 0.1, 0.1, 1.0);
+			this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+			this.gl.enable(this.gl.DEPTH_TEST);
+			this.gl.enable(this.gl.CULL_FACE);
+			this.gl.frontFace(this.gl.CCW);
+			this.gl.cullFace(this.gl.BACK);
+		}
 	}
 
 	public setAutoResize(flag: boolean): void {
@@ -50,5 +63,9 @@ export class Renderer {
 			CssUtils.clearRule(".wte-canvas");
 			CssUtils.clearRule("html, body");
 		}
+	}
+
+	public get gl() {
+		return this._gl;
 	}
 }

@@ -29,9 +29,11 @@ export class Renderer {
 				this._canvas.style.background = "black";
 				if (/comp|inter|loaded/.test(document.readyState)) {
 					document.body.appendChild(this._canvas);
+					this.resize();
 				} else {
 					document.addEventListener("DOMContentLoaded", e => {
 						document.body.appendChild(this._canvas as HTMLCanvasElement);
+						this.resize();
 					});
 				}
 		}

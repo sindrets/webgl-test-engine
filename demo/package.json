@@ -1,0 +1,21 @@
+{
+  "name": "wte-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webgl-test-engine.js",
+  "scripts": {
+    "start": "http-server -a localhost -p 4000",
+    "build": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/gl-matrix": "^2.4.5",
+    "@types/webgl2": "0.0.5",
+    "gl-matrix": "^3.0.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
+  }
+}

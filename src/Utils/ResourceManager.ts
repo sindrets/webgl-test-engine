@@ -1,5 +1,3 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-
 export class ResourceManager {
 	private static cache = new Map<string, any>();
 
@@ -16,16 +14,14 @@ export class ResourceManager {
 		forceReload = false,
 	): Promise<string> {
 		return new Promise((resolve, reject) => {
-			ResourceManager.fetch(url, cache, forceReload, "text::", {
-				responseType: "text",
-				transformResponse: data => data,
-			})
-				.then(resp => {
-					if (typeof resp.data !== "string") {
+			ResourceManager.fetch(url, cache, forceReload, "text::")
+				.then(async resp => {
+					const data = await resp.text();
+					if (typeof data !== "string") {
 						reject("Response data was not of type 'string'!");
-						console.error(resp.data);
+						console.error(data);
 					} else {
-						resolve(resp.data);
+						resolve(data);
 					}
 				})
 				.catch(reason => {
@@ -47,13 +43,14 @@ export class ResourceManager {
 		forceReload = false,
 	): Promise<string> {
 		return new Promise((resolve, reject) => {
-			ResourceManager.fetch(url, cache, forceReload, "json::", { responseType: "json" })
-				.then(resp => {
-					if (typeof resp.data !== "object") {
+			ResourceManager.fetch(url, cache, forceReload, "json::")
+				.then(async resp => {
+					const data = await resp.json();
+					if (typeof data !== "object") {
 						reject("Response data was not of type 'object'!");
-						console.error(resp.data);
+						console.error(data);
 					} else {
-						resolve(resp.data);
+						resolve(data);
 					}
 				})
 				.catch(reason => {
@@ -77,8 +74,8 @@ export class ResourceManager {
 		cache: boolean,
 		forceReload: boolean,
 		cacheKeyPrefix = "fetch::",
-		options: AxiosRequestConfig = {},
-	): Promise<AxiosResponse> {
+		options: RequestInit = {},
+	): Promise<Response> {
 		return new Promise((resolve, reject) => {
 			let resolvedUrl = new URL(url, location.origin).href;
 			let cacheKey = cacheKeyPrefix + resolvedUrl;
@@ -88,10 +85,9 @@ export class ResourceManager {
 					return;
 				}
 			}
-			axios
-				.get(url, options)
+			fetch(url, options)
 				.then(resp => {
-					if (~~(resp.status / 100) == 2) {
+					if (resp.ok) {
 						if (cache) {
 							ResourceManager.cache.set(cacheKey, resp);
 						}

@@ -38,8 +38,8 @@ async function crawlDir(relativePath, ignore = [], callback) {
 					await crawlDir(fullPath, ignore, callback);
 				}
 			}
-			if (i == arr.length - 1) resolve();
 		});
+		resolve();
 	});
 }
 
@@ -53,7 +53,6 @@ async function crawlDir(relativePath, ignore = [], callback) {
 		console.log("  " + target);
 	});
 
-	data = data.slice(0, data.length - 2);
-	await fs.writeFile("src/Headers.ts", data);
+	await fs.writeFile("src/Headers.ts", data.slice(0, data.length - 2));
 	console.log("Headers generated!");
 })();

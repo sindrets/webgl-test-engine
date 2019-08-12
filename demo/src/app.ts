@@ -1,6 +1,6 @@
 import { glMatrix, mat4 } from "gl-matrix";
 
-(async () => {
+async function main() {
 	engine.renderer.init();
 
 	const gl = engine.renderer.gl;
@@ -28,88 +28,13 @@ import { glMatrix, mat4 } from "gl-matrix";
 			return;
 		}
 
-		// prettier-ignore
-		var boxVertices = [ 
-			// X, Y, Z           R, G, B
-			// Top
-			-1.0, 1.0, -1.0,   0.5, 0.5, 0.5,
-			-1.0, 1.0, 1.0,    0.5, 0.5, 0.5,
-			1.0, 1.0, 1.0,     0.5, 0.5, 0.5,
-			1.0, 1.0, -1.0,    0.5, 0.5, 0.5,
-
-			// Left
-			-1.0, 1.0, 1.0,    0.75, 0.25, 0.5,
-			-1.0, -1.0, 1.0,   0.75, 0.25, 0.5,
-			-1.0, -1.0, -1.0,  0.75, 0.25, 0.5,
-			-1.0, 1.0, -1.0,   0.75, 0.25, 0.5,
-
-			// Right
-			1.0, 1.0, 1.0,    0.25, 0.25, 0.75,
-			1.0, -1.0, 1.0,   0.25, 0.25, 0.75,
-			1.0, -1.0, -1.0,  0.25, 0.25, 0.75,
-			1.0, 1.0, -1.0,   0.25, 0.25, 0.75,
-
-			// Front
-			1.0, 1.0, 1.0,    1.0, 0.0, 0.15,
-			1.0, -1.0, 1.0,    1.0, 0.0, 0.15,
-			-1.0, -1.0, 1.0,    1.0, 0.0, 0.15,
-			-1.0, 1.0, 1.0,    1.0, 0.0, 0.15,
-
-			// Back
-			1.0, 1.0, -1.0,    0.0, 1.0, 0.15,
-			1.0, -1.0, -1.0,    0.0, 1.0, 0.15,
-			-1.0, -1.0, -1.0,    0.0, 1.0, 0.15,
-			-1.0, 1.0, -1.0,    0.0, 1.0, 0.15,
-
-			// Bottom
-			-1.0, -1.0, -1.0,   0.5, 0.5, 1.0,
-			-1.0, -1.0, 1.0,    0.5, 0.5, 1.0,
-			1.0, -1.0, 1.0,     0.5, 0.5, 1.0,
-			1.0, -1.0, -1.0,    0.5, 0.5, 1.0,
-		];
-
-		// prettier-ignore
-		var boxIndices = [
-			// Top
-			0, 1, 2,
-			0, 2, 3,
-
-			// Left
-			5, 4, 6,
-			6, 4, 7,
-
-			// Right
-			8, 9, 10,
-			8, 10, 11,
-
-			// Front
-			13, 12, 14,
-			15, 14, 12,
-
-			// Back
-			16, 17, 18,
-			16, 18, 19,
-
-			// Bottom
-			21, 20, 22,
-			22, 20, 23
-		];
-
 		var boxVertexBufferObject = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, boxVertexBufferObject);
-		gl.bufferData(
-			gl.ARRAY_BUFFER,
-			new Float32Array(boxVertices),
-			gl.STATIC_DRAW
-		);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(boxVertices), gl.STATIC_DRAW);
 
 		var boxIndexBufferObject = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, boxIndexBufferObject);
-		gl.bufferData(
-			gl.ELEMENT_ARRAY_BUFFER,
-			new Uint16Array(boxIndices),
-			gl.STATIC_DRAW
-		);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(boxIndices), gl.STATIC_DRAW);
 
 		var positionAttribLocation = gl.getAttribLocation(program, "vertPos");
 		var colorAttribLocation = gl.getAttribLocation(program, "vertColor");
@@ -119,7 +44,7 @@ import { glMatrix, mat4 } from "gl-matrix";
 			gl.FLOAT, // Type of elements
 			false,
 			6 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
-			0 // Offset from the beginning of a single vertex to this attribute
+			0, // Offset from the beginning of a single vertex to this attribute
 		);
 		gl.vertexAttribPointer(
 			colorAttribLocation, // Attribute location
@@ -127,7 +52,7 @@ import { glMatrix, mat4 } from "gl-matrix";
 			gl.FLOAT, // Type of elements
 			false,
 			6 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
-			3 * Float32Array.BYTES_PER_ELEMENT // Offset from the beginning of a single vertex to this attribute
+			3 * Float32Array.BYTES_PER_ELEMENT, // Offset from the beginning of a single vertex to this attribute
 		);
 
 		gl.enableVertexAttribArray(positionAttribLocation);
@@ -151,7 +76,7 @@ import { glMatrix, mat4 } from "gl-matrix";
 			glMatrix.toRadian(45),
 			canvas.clientWidth / canvas.clientHeight,
 			0.1,
-			1000.0
+			1000.0,
 		);
 		console.log(canvas.clientWidth, canvas.clientHeight);
 
@@ -161,7 +86,7 @@ import { glMatrix, mat4 } from "gl-matrix";
 
 		var xRotationMatrix = mat4.create();
 		var yRotationMatrix = mat4.create();
-		
+
 		var identityMatrix = mat4.create();
 		mat4.identity(identityMatrix);
 		var angle = 0;
@@ -185,9 +110,78 @@ import { glMatrix, mat4 } from "gl-matrix";
 				glMatrix.toRadian(45),
 				canvas.clientWidth / canvas.clientHeight,
 				0.1,
-				1000.0
+				1000.0,
 			);
 			gl.uniformMatrix4fv(matProjUniformLocation, false, projMatrix);
-		}
+		};
 	}
-})();
+}
+
+// prettier-ignore
+var boxVertices = [ 
+	// X, Y, Z           R, G, B
+	// Top
+	-1.0, 1.0, -1.0,   0.5, 0.5, 0.5,
+	-1.0, 1.0, 1.0,    0.5, 0.5, 0.5,
+	1.0, 1.0, 1.0,     0.5, 0.5, 0.5,
+	1.0, 1.0, -1.0,    0.5, 0.5, 0.5,
+
+	// Left
+	-1.0, 1.0, 1.0,    0.75, 0.25, 0.5,
+	-1.0, -1.0, 1.0,   0.75, 0.25, 0.5,
+	-1.0, -1.0, -1.0,  0.75, 0.25, 0.5,
+	-1.0, 1.0, -1.0,   0.75, 0.25, 0.5,
+
+	// Right
+	1.0, 1.0, 1.0,    0.25, 0.25, 0.75,
+	1.0, -1.0, 1.0,   0.25, 0.25, 0.75,
+	1.0, -1.0, -1.0,  0.25, 0.25, 0.75,
+	1.0, 1.0, -1.0,   0.25, 0.25, 0.75,
+
+	// Front
+	1.0, 1.0, 1.0,    1.0, 0.0, 0.15,
+	1.0, -1.0, 1.0,    1.0, 0.0, 0.15,
+	-1.0, -1.0, 1.0,    1.0, 0.0, 0.15,
+	-1.0, 1.0, 1.0,    1.0, 0.0, 0.15,
+
+	// Back
+	1.0, 1.0, -1.0,    0.0, 1.0, 0.15,
+	1.0, -1.0, -1.0,    0.0, 1.0, 0.15,
+	-1.0, -1.0, -1.0,    0.0, 1.0, 0.15,
+	-1.0, 1.0, -1.0,    0.0, 1.0, 0.15,
+
+	// Bottom
+	-1.0, -1.0, -1.0,   0.5, 0.5, 1.0,
+	-1.0, -1.0, 1.0,    0.5, 0.5, 1.0,
+	1.0, -1.0, 1.0,     0.5, 0.5, 1.0,
+	1.0, -1.0, -1.0,    0.5, 0.5, 1.0,
+];
+
+// prettier-ignore
+var boxIndices = [
+	// Top
+	0, 1, 2,
+	0, 2, 3,
+
+	// Left
+	5, 4, 6,
+	6, 4, 7,
+
+	// Right
+	8, 9, 10,
+	8, 10, 11,
+
+	// Front
+	13, 12, 14,
+	15, 14, 12,
+
+	// Back
+	16, 17, 18,
+	16, 18, 19,
+
+	// Bottom
+	21, 20, 22,
+	22, 20, 23
+];
+
+main();

@@ -4,8 +4,8 @@
   "description": "",
   "main": "out/Main.js",
   "scripts": {
-    "build": "webpack --mode development && npm run gen-decl",
-    "build-prod": "webpack --mode production && npm run gen-decl",
+    "build": "node gen-headers.js && webpack --mode development && npm run gen-decl",
+    "build-prod": "node gen-headers.js && webpack --mode production && npm run gen-decl",
     "test": "tsc -p ./tsconfig.test.json && jest",
     "start": "http-server -a localhost -p 3000",
     "gen-decl": "dts-generator --project ./ --out ./typings/wte.d.ts"

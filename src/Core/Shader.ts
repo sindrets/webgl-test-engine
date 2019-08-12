@@ -1,5 +1,10 @@
 import { ResourceManager } from "../Utils/ResourceManager";
 
+enum ShaderType {
+	VERTEX_SHADER = WebGL2RenderingContext.VERTEX_SHADER,
+	FRAGMENT_SHADER = WebGL2RenderingContext.FRAGMENT_SHADER
+}
+
 export class Shader {
 	private _gl: WebGL2RenderingContext;
 	private _type: GLenum;
@@ -9,20 +14,20 @@ export class Shader {
 	private _valid: boolean = false;
 	private _compiled: boolean = false;
 
-	constructor(context: WebGL2RenderingContext, type: GLenum, identifier?: string) {
+	constructor(context: WebGL2RenderingContext, type: ShaderType, identifier?: string) {
 		if (identifier === undefined) {
 			switch (type) {
-				case WebGLRenderingContext.FRAGMENT_SHADER:
+				case ShaderType.FRAGMENT_SHADER:
 					identifier = "FragmentShader";
 					break;
-				case WebGLRenderingContext.VERTEX_SHADER:
+				case ShaderType.VERTEX_SHADER:
 					identifier = "VertexShader";
 					break;
 				default:
 					throw new Error(
 						`Expected type to be either FRAGMENT_SHADER ` +
-							`(${WebGLRenderingContext.FRAGMENT_SHADER}) or a VERTEX_SHADER ` +
-							`(${WebGLRenderingContext.VERTEX_SHADER}), given ${type}.`,
+							`(${ShaderType.FRAGMENT_SHADER}) or a VERTEX_SHADER ` +
+							`(${ShaderType.VERTEX_SHADER}), given ${type}.`,
 					);
 			}
 		}

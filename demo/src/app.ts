@@ -1,14 +1,15 @@
-import { glMatrix, mat4 } from "gl-matrix";
+import { glMatrix, mat4, vec2 } from "gl-matrix";
 
 async function main() {
 	engine.renderer.init();
 
 	const gl = engine.renderer.gl;
 	const canvas = engine.renderer.canvas;
+	console.log(vec2);
 
 	if (gl && canvas) {
-		const vertShader = new wte.Shader(gl, gl.VERTEX_SHADER);
-		const fragShader = new wte.Shader(gl, gl.FRAGMENT_SHADER);
+		const vertShader = new wte.Shader(gl, wte.ShaderType.VERTEX_SHADER);
+		const fragShader = new wte.Shader(gl, wte.ShaderType.FRAGMENT_SHADER);
 
 		await vertShader.createFromFile("/src/shaders/vertShader.vert");
 		await fragShader.createFromFile("/src/shaders/fragShader.frag");
@@ -28,16 +29,16 @@ async function main() {
 			return;
 		}
 
-		var boxVertexBufferObject = gl.createBuffer();
+		const boxVertexBufferObject = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, boxVertexBufferObject);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(boxVertices), gl.STATIC_DRAW);
 
-		var boxIndexBufferObject = gl.createBuffer();
+		const boxIndexBufferObject = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, boxIndexBufferObject);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(boxIndices), gl.STATIC_DRAW);
 
-		var positionAttribLocation = gl.getAttribLocation(program, "vertPos");
-		var colorAttribLocation = gl.getAttribLocation(program, "vertColor");
+		const positionAttribLocation = gl.getAttribLocation(program, "vertPos");
+		const colorAttribLocation = gl.getAttribLocation(program, "vertColor");
 		gl.vertexAttribPointer(
 			positionAttribLocation, // Attribute location
 			3, // Number of elements per attribute
@@ -61,14 +62,14 @@ async function main() {
 		// Tell OpenGL state machine which program should be active.
 		gl.useProgram(program);
 
-		var matWorldUniformLocation = gl.getUniformLocation(program, "mWorld");
-		var matViewUniformLocation = gl.getUniformLocation(program, "mView");
-		var matProjUniformLocation = gl.getUniformLocation(program, "mProj");
+		const matWorldUniformLocation = gl.getUniformLocation(program, "mWorld");
+		const matViewUniformLocation = gl.getUniformLocation(program, "mView");
+		const matProjUniformLocation = gl.getUniformLocation(program, "mProj");
 
 		console.log(mat4);
-		var worldMatrix = mat4.create();
-		var viewMatrix = mat4.create();
-		var projMatrix = mat4.create();
+		const worldMatrix = mat4.create();
+		const viewMatrix = mat4.create();
+		const projMatrix = mat4.create();
 		mat4.identity(worldMatrix);
 		mat4.lookAt(viewMatrix, [0, 0, -8], [0, 0, 0], [0, 1, 0]);
 		mat4.perspective(
@@ -84,12 +85,12 @@ async function main() {
 		gl.uniformMatrix4fv(matViewUniformLocation, false, viewMatrix);
 		gl.uniformMatrix4fv(matProjUniformLocation, false, projMatrix);
 
-		var xRotationMatrix = mat4.create();
-		var yRotationMatrix = mat4.create();
+		const xRotationMatrix = mat4.create();
+		const yRotationMatrix = mat4.create();
 
-		var identityMatrix = mat4.create();
+		const identityMatrix = mat4.create();
 		mat4.identity(identityMatrix);
-		var angle = 0;
+		let angle = 0;
 		(engine as any).render = () => {
 			// @ts-ignore
 			if (window.updateProj) window.updateProj();
@@ -118,7 +119,7 @@ async function main() {
 }
 
 // prettier-ignore
-var boxVertices = [ 
+const boxVertices = [ 
 	// X, Y, Z           R, G, B
 	// Top
 	-1.0, 1.0, -1.0,   0.5, 0.5, 0.5,
@@ -158,7 +159,7 @@ var boxVertices = [
 ];
 
 // prettier-ignore
-var boxIndices = [
+const boxIndices = [
 	// Top
 	0, 1, 2,
 	0, 2, 3,

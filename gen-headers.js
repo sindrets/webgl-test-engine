@@ -53,6 +53,6 @@ async function crawlDir(relativePath, ignore = [], callback) {
 		console.log("  " + target);
 	});
 
-	await fs.writeFile("src/Headers.ts", data.slice(0, data.length - 2));
+	await fs.writeFile("src/Headers.ts", data.slice(0, data.length - 1));
 	console.log("Headers generated!");
 })();

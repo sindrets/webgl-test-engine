@@ -1,6 +1,6 @@
 import { ResourceManager } from "../Utils/ResourceManager";
 
-enum ShaderType {
+export enum ShaderType {
 	VERTEX_SHADER = WebGL2RenderingContext.VERTEX_SHADER,
 	FRAGMENT_SHADER = WebGL2RenderingContext.FRAGMENT_SHADER
 }

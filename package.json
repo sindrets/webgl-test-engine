@@ -4,11 +4,10 @@
   "description": "",
   "main": "out/Main.js",
   "scripts": {
-    "build": "node gen-headers.js && webpack --mode development && npm run gen-decl",
-    "build-prod": "node gen-headers.js && webpack --mode production && npm run gen-decl",
+    "build": "node gen-headers.js && npm run gen-decl && webpack",
     "test": "tsc -p ./tsconfig.test.json && jest",
     "start": "http-server -a localhost -p 3000",
-    "gen-decl": "dts-generator --project ./ --out ./typings/wte.d.ts"
+    "gen-decl": "dts-generator --project ./ --out ./typings/wte.d.ts && mkdir -p demo/typings && cp typings/wte.d.ts demo/typings"
   },
   "repository": {
     "type": "git",
@@ -30,7 +29,9 @@
     "node-fetch": "^2.6.0"
   },
   "dependencies": {
+    "@types/gl-matrix": "^2.4.5",
     "@types/webgl2": "0.0.5",
+    "gl-matrix": "^3.0.0",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
     "webpack": "^4.35.3",

@@ -1,4 +1,11 @@
 import { glMatrix, mat4, vec2 } from "gl-matrix";
+import { Color } from "Utils/Color";
+
+declare global {
+	interface Window {
+		[key: string]: any;
+	}
+}
 
 async function main() {
 	engine.renderer.init();
@@ -90,6 +97,7 @@ async function main() {
 
 		const identityMatrix = mat4.create();
 		mat4.identity(identityMatrix);
+		const cc = window.clearColor = new wte.Color(0.15, 0.15, 0.15);
 		let angle = 0;
 		(engine as any).render = () => {
 			// @ts-ignore
@@ -100,12 +108,12 @@ async function main() {
 			mat4.mul(worldMatrix, yRotationMatrix, xRotationMatrix);
 			gl.uniformMatrix4fv(matWorldUniformLocation, false, worldMatrix);
 
-			gl.clearColor(0.15, 0.15, 0.15, 1.0);
+			gl.clearColor(cc.red, cc.green, cc.blue, cc.alpha);
 			gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 			gl.drawElements(gl.TRIANGLES, boxIndices.length, gl.UNSIGNED_SHORT, 0);
 		};
 
-		(window as any).updateProj = function() {
+		window.updateProj = function() {
 			mat4.perspective(
 				projMatrix,
 				glMatrix.toRadian(45),

@@ -74,7 +74,7 @@ export class Engine {
 				this.tps = ticks;
 				frames = ticks = 0;
 				timer += 1000;
-				console.log("FPS:", this.fps, "TPS:", this.tps, "delta:", deltaU + 1);
+				console.debug("FPS:", this.fps, "TPS:", this.tps, "delta:", deltaU + 1);
 			}
 			if (this.running) {
 				requestAnimationFrame(mainLoop);
